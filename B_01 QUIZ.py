@@ -17,13 +17,13 @@ def yes_no(question):
 def generate_equation_and_answer(difficulty_level):
     if difficulty_level == 'easy':
         num1, num2 = random.randint(1, 10), random.randint(1, 10)
-        operators = ["+", "-"]
+        operators = ["+", "-"]  # easy
     elif difficulty_level == 'medium':
         num1, num2 = random.randint(10, 25), random.randint(10, 25)
-        operators = ["+", "-", "*"]
+        operators = ["+", "-", "*"]  # medium
     elif difficulty_level == 'hard':
         num1, num2 = random.randint(25, 50), random.randint(25, 50)
-        operators = ["*", "/"]
+        operators = ["*", "/"]  # hard
     else:  # impossible
         num1, num2 = random.randint(25, 75), random.randint(25, 75)
         operators = ["*", "/"]
@@ -33,10 +33,12 @@ def generate_equation_and_answer(difficulty_level):
         return f"{num1} + {num2}", num1 + num2
     elif operator == "-":
         return f"{max(num1, num2)} - {min(num1, num2)}", abs(num1 - num2)
+        # ⬆️⬆️⬆️⬆️ makes sure there is no negative number in the answer by putting the larger number first
     elif operator == "*":
         return f"{num1} * {num2}", num1 * num2
     else:
         return f"{num1 * num2} / {num2}", num1
+        # ⬆️⬆️ makes sure there is no decimal answers
 
 
 # Function for a single round of the quiz
@@ -72,9 +74,7 @@ def quiz_round(difficulty_level, game_history):
             return 1
         else:
             print(f"Incorrect. The correct answer is {correct_answer}. {emoji_incorrect}")
-            if not yes_no("Do you want to try again? "):
-                break
-    return 0  # User didn't answer correctly after trying again
+            return 0
 
 
 # Main function to run the quiz
@@ -119,14 +119,13 @@ def quiz():
         score = quiz_round(difficulty_level, game_history)
         if score == -2:
             break
-        if score != -1:
-            questions_asked += 1
-        questions_right += score
+        questions_asked += 1
+        questions_right += score  # Increment score regardless of correctness
 
     # final score and quiz history
     print("\nQuiz over!")
     print(f"Questions right: {questions_right}/{questions_asked}")
-    if 0 < questions_asked == questions_right:
+    if questions_asked > 0 and questions_asked == questions_right:
         print("\nYay! Good job, you got all of the questions right!")
 
     if game_history:
