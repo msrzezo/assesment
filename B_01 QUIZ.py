@@ -24,9 +24,9 @@ def generate_equation_and_answer(difficulty_level):
     elif difficulty_level == 'hard':
         num1, num2 = random.randint(25, 50), random.randint(25, 50)
         operators = ["*", "/"]  # hard
-    else:  # impossible
+    else:
         num1, num2 = random.randint(25, 75), random.randint(25, 75)
-        operators = ["*", "/"]
+        operators = ["*", "/"]  # impossible
 
     operator = random.choice(operators)
     if operator == "+":
@@ -41,8 +41,8 @@ def generate_equation_and_answer(difficulty_level):
         # ⬆️⬆️ makes sure there is no decimal answers
 
 
-# Function for a single round of the quiz
-def quiz_round(difficulty_level, game_history):
+# Function for a single question of the quiz
+def quiz_question(difficulty_level, quiz_history):
     emoji_correct = "✔️"
     emoji_incorrect = "❌"
     emoji_equation = "🔢"
@@ -68,7 +68,7 @@ def quiz_round(difficulty_level, game_history):
                 print("Invalid input. Please enter an integer.")
                 continue
 
-        game_history.append((equation, user_answer, correct_answer))
+        quiz_history.append((equation, user_answer, correct_answer))
         if user_answer == correct_answer:
             print(f"Correct! {emoji_correct}")
             return 1
@@ -81,15 +81,15 @@ def quiz_round(difficulty_level, game_history):
 def quiz():
     # Asking user for number of questions and difficulty level
     while True:
-        rounds_input = input(
+        questions_input = input(
             "How many questions would you like to answer? (Press Enter for infinite questions): ").strip()
-        if rounds_input == "":
-            rounds = float('inf')
+        if questions_input == "":
+            questions = float('inf')
             print("∞ Infinite Mode ∞ 🕹️🌀")
             break
         try:
-            rounds = int(rounds_input)
-            if rounds == 0:
+            questions = int(questions_input)
+            if questions == 0:
                 print("Please enter a valid number of questions.")
             else:
                 break
@@ -107,16 +107,16 @@ def quiz():
         else:
             print("Invalid input. Please choose a valid difficulty level.")
 
-    # variables for score and game history
+    # variables for score and quiz history
     questions_right = 0
-    game_history = []
+    quiz_history = []
     questions_asked = 0
 
-    # Loop for asking questions until user decides to stop or reach the specified number of rounds
+    # Loop for asking questions until user decides to stop or reach the specified number of questions
     while True:
-        if rounds != float('inf') and questions_asked == rounds:
+        if questions != float('inf') and questions_asked == questions:
             break
-        score = quiz_round(difficulty_level, game_history)
+        score = quiz_question(difficulty_level, quiz_history)
         if score == -2:
             break
         questions_asked += 1
@@ -128,11 +128,11 @@ def quiz():
     if questions_asked > 0 and questions_asked == questions_right:
         print("\nYay! Good job, you got all of the questions right!")
 
-    if game_history:
+    if quiz_history:
         if yes_no("Do you want to see the quiz history? "):
             print("\nQuiz History:")
-            for i, (equation, user_answer, correct_answer) in enumerate(game_history, start=1):
-                print(f"Round {i}:")
+            for i, (equation, user_answer, correct_answer) in enumerate(quiz_history, start=1):
+                print(f"Question {i}:")
                 print(f" Equation: {equation}")
                 print(f" Your Answer: {user_answer}")
                 print(f" Correct Answer: {correct_answer}")
@@ -155,5 +155,5 @@ if yes_no("Do you want to read the instructions? "):
     you would like to answer and what difficulty you want 
     (Easy, Medium, Hard, Impossible) try to beat impossible level!
     Good Luck!
-    To stop the game at any point, type `xxx`""")
+    To stop the quiz at any point, type `xxx`""")
 quiz()
